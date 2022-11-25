@@ -47,9 +47,10 @@ def porter_stemmer(word: str):
         word = word[:-1]
     
     # Step 1b
-    if word[-3:] == "eed" and get_measure(word[:-3]) > 0:
-        word = word[:-1]
-    if (hasVowel(word[:-2]) and word[-2:] == "ed") or (hasVowel(word[:-3]) and word[-3:] == "ing"):
+    if word[-3:] == "eed":
+        if get_measure(word[:-3]) > 0:
+            word = word[:-1]
+    elif (hasVowel(word[:-2]) and word[-2:] == "ed") or (hasVowel(word[:-3]) and word[-3:] == "ing"):
         word = word[:-2] if word[-2:] == "ed" else word[:-3]
         if word[-2:] in ("at", "bl", "iz"):
             word += "e"
@@ -89,14 +90,7 @@ def porter_stemmer(word: str):
     return word
 
 
-print(porter_stemmer("abdicate"))
-print(porter_stemmer("realize"))
-print(porter_stemmer("indicative"))
-print(porter_stemmer("feliciti"))
-print(porter_stemmer("mezical"))
-print(porter_stemmer("gallness"))
 
-print(porter_stemmer("lawfulness"))
 
 
 
