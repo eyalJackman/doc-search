@@ -82,19 +82,19 @@ def porter_stemmer(word: str):
             word = word[:-4]
 
     # Step 4
-    for suff in step4_list:
-        if get_measure(word[-len(suff):]) > 1:
-            word = word[:-len(suff)]
+    # for suff in step4_list:
+    #     if get_measure(word[-len(suff):]) > 1:
+    #         word = word[:-len(suff)]
     
     return word
 
 
-# print(porter_stemmer("abdicate"))
-# print(porter_stemmer("realize"))
-# print(porter_stemmer("indicative"))
-# print(porter_stemmer("feliciti"))
-# print(porter_stemmer("mezical"))
-# print(porter_stemmer("gallness"))
+print(porter_stemmer("abdicate"))
+print(porter_stemmer("realize"))
+print(porter_stemmer("indicative"))
+print(porter_stemmer("feliciti"))
+print(porter_stemmer("mezical"))
+print(porter_stemmer("gallness"))
 
 print(porter_stemmer("lawfulness"))
 
