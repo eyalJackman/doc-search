@@ -1,26 +1,36 @@
 import re
 
 
-isVowel = lambda c: c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u'
+def is_vowel(c):
+    return c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u'
 
-def hasVowel(w):
+
+def has_vowel(w):
     for char in w:
-        if isVowel(char):
+        if is_vowel(char):
             return True
     return False
 
 
-step2_list = ("ational", "tional", "enci", "anci", "izer", "abli", "alli", "entli", "eli", "ousli", "ization", "ation", "ator", "alism", "iveness", "fulness", "ousness", "aliti", "iviti", "biliti")
-step2_map = {"ational": "ate", "tional": "tion", "enci": "ence", "anci": "ance", "izer": "ize", "abli": "able", "alli": "al", "entli": "ent", "eli": "e", "ousli": "ous", "ization": "ize", "ation": "ate", "ator": "ate", "alism": "al", "iveness": "ive", "fulness": "ful", "ousness": "ous", "aliti": "al", "iviti": "ive", "biliti": "ble"}
+step2_list = (
+    "ational", "tional", "enci", "anci", "izer", "abli", "alli", "entli", "eli", "ousli", "ization", "ation", "ator",
+    "alism", "iveness", "fulness", "ousness", "aliti", "iviti", "biliti")
+step2_map = {"ational": "ate", "tional": "tion", "enci": "ence", "anci": "ance", "izer": "ize", "abli": "able",
+             "alli": "al", "entli": "ent", "eli": "e", "ousli": "ous", "ization": "ize", "ation": "ate", "ator": "ate",
+             "alism": "al", "iveness": "ive", "fulness": "ful", "ousness": "ous", "aliti": "al", "iviti": "ive",
+             "biliti": "ble"}
 
-step4_list = ('al', 'ance', 'ence', 'er', 'ic', 'able', 'ible', 'ant', 'ement', 'ment', 'ent', 'ion', 'ou', 'ism', 'ate', 'iti', 'ous', 'ive', 'ize')
+step4_list = (
+    'al', 'ance', 'ence', 'er', 'ic', 'able', 'ible', 'ant', 'ement', 'ment', 'ent', 'ion', 'ou', 'ism', 'ate', 'iti',
+    'ous', 'ive', 'ize')
+
 
 def get_measure(word: str) -> int:
     """Returns measure, used in Porter Stemmer"""
     count = 0
     vowel = False
     for char in word:
-        if vowel != isVowel(char):
+        if vowel != is_vowel(char):
             vowel = not vowel
             if vowel is False:
                 count += 1
@@ -45,22 +55,23 @@ def porter_stemmer(word: str):
         pass
     elif word[-1] == "s":
         word = word[:-1]
-    
+
     # Step 1b
     if word[-3:] == "eed":
         if get_measure(word[:-3]) > 0:
             word = word[:-1]
-    elif (hasVowel(word[:-2]) and word[-2:] == "ed") or (hasVowel(word[:-3]) and word[-3:] == "ing"):
+    elif (has_vowel(word[:-2]) and word[-2:] == "ed") or (has_vowel(word[:-3]) and word[-3:] == "ing"):
         word = word[:-2] if word[-2:] == "ed" else word[:-3]
         if word[-2:] in ("at", "bl", "iz"):
             word += "e"
-        elif word[-1] == word[-2]:
+        elif word[-1] == word[-2] and word[-1] not in ('l', 's', 'z'):
             word = word[:-1]
-        elif get_measure(word) == 1 and (not isVowel(word[-3]) and isVowel(word[-2]) and not isVowel(word[-1]) and word[-1] not in ('w', 'x', 'y')):
+        elif get_measure(word) == 1 and len(word) >= 3 and (not is_vowel(word[-3]) and is_vowel(word[-2]) and not
+        is_vowel(word[-1]) and word[-1] not in ('w', 'x', 'y')):
             word += "e"
-    
+
     # Step 1c
-    if hasVowel(word[:-1]) and word[-1] == "y":
+    if has_vowel(word[:-1]) and word[-1] == "y":
         word = word[:-1] + "i"
 
     # Step 2
@@ -68,7 +79,7 @@ def porter_stemmer(word: str):
         for suff in step2_list:
             if word.endswith(suff):
                 word = word[:-len(suff)] + step2_map[suff]
-    
+
     # Step 3
     if get_measure(word) > 0:
         if word[-5:] == "ative":
@@ -77,24 +88,31 @@ def porter_stemmer(word: str):
             word = word[:-3]
         if word[-4:] == "ical":
             word = word[:-2]
-        if  word[-3:] == "ful":
+        if word[-3:] == "ful":
             word = word[:-3]
         if word[-4:] == "ness":
             word = word[:-4]
 
     # Step 4
-    # for suff in step4_list:
-    #     if get_measure(word[-len(suff):]) > 1:
-    #         word = word[:-len(suff)]
-    
+    for suff in step4_list:
+        if word[-len(suff):] == suff and get_measure(word[:-len(suff)]) > 1:
+
+            if suff != "ion" or (word[-len(suff)] in ('s', 't')):
+                word = word[:-len(suff)]
+
+    # Step 5a
+    measure = get_measure(word[:-1])
+    if measure > 1 and word[-1] == "e":
+        word = word[:-1]
+    elif measure == 1 and word[-1] == "e" and (not is_vowel(word[-3]) and is_vowel(word[-2]) and not
+    is_vowel(word[-1]) and word[-1] not in ('w', 'x', 'y')):
+        word = word[:-1]
+
+    # Step 5b
+    if get_measure(word) > 1 and word[-1] == word[-2] and word[-1] == "l":
+        word = word[:-1]
+
     return word
-
-
-
-
-
-
-
 
 
 def stopword_removal():
@@ -109,6 +127,6 @@ def punctuation_removal():
 # print(w[:-3])
 
 
-def tokenize(word: str) -> str:
+def tokenize(word: str) -> list[str]:
     """ Runs tokenization -- Stemming, stopword removal, punctuation removal"""
     return porter_stemmer(stopword_removal(punctuation_removal(word)))
