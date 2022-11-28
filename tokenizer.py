@@ -1,7 +1,9 @@
 import re
 
-import os
-print(os.getcwd())
+# import os
+# print(os.getcwd())
+# dir_path = os.path.dirname(os.path.realpath(__file__))
+# print(dir_path)
 # Helper functions
 
 def is_vowel(c):
@@ -32,7 +34,7 @@ with open("stopwords.txt", 'r') as rFile:
     stopwordStr = rFile.read()
 
 stopwords = set()
-for stopword in stopwordStr.split(" "):
+for stopword in stopwordStr.split("\n"):
     stopwords.add(stopword)
 
 
@@ -130,8 +132,9 @@ def porter_stemmer(word: str):
 
 
 def stopword_removal(text: str):
-    words = text.split(" ")
-    ret_list = [word for word in words if word in stopwords]
+    """Removes stopwords -- O(n) space/time"""
+    words = re.split(r"\s", text)
+    ret_list = [word for word in words if word not in stopwords]
     return ret_list
 
 

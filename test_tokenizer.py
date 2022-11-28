@@ -46,8 +46,8 @@ def test_stemmer():
 
 
 def test_stopword():
-    assert removal("jargon blargon fake words") == ['jargon', 'blargon', 'fake', 'words'], "Keep all"
-    assert removal("i me nonword myself nonword") == ['nonword', 'nonword'], "remove 3"
+    assert removal("jargon blargon fake words") == ['jargon', 'blargon', 'fake', 'words'], f"Keep all {removal('jargon blargon fake words')}"
+    assert removal("i me nonword myself nonword") == ['nonword', 'nonword'], f"remove 3: {removal('i me nonword myself nonword')}"
 
 
 if __name__ == "__main__":
