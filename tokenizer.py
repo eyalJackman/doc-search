@@ -1,5 +1,8 @@
 import re
 
+import os
+print(os.getcwd())
+# Helper functions
 
 def is_vowel(c):
     return c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u'
@@ -25,11 +28,19 @@ step4_list = (
     'ous', 'ive', 'ize')
 
 
-def get_measure(word: str) -> int:
+with open("stopwords.txt", 'r') as rFile:
+    stopwordStr = rFile.read()
+
+stopwords = set()
+for stopword in stopwordStr.split(" "):
+    stopwords.add(stopword)
+
+
+def get_measure(word_m: str) -> int:
     """Returns measure, used in Porter Stemmer"""
     count = 0
     vowel = False
-    for char in word:
+    for char in word_m:
         if vowel != is_vowel(char):
             vowel = not vowel
             if vowel is False:
@@ -37,6 +48,9 @@ def get_measure(word: str) -> int:
         if count > 1:
             return count
     return count
+
+
+# End Helpers
 
 
 def porter_stemmer(word: str):
@@ -115,8 +129,11 @@ def porter_stemmer(word: str):
     return word
 
 
-def stopword_removal():
-    pass
+def stopword_removal(text: str):
+    words = text.split(" ")
+    ret_list = [word for word in words if word in stopwords]
+    return ret_list
+
 
 
 def punctuation_removal():

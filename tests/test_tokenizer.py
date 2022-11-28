@@ -1,6 +1,7 @@
 import tokenizer
 
 porter = tokenizer.porter_stemmer
+removal = tokenizer.stopword_removal
 
 
 def test_stemmer():
@@ -44,6 +45,11 @@ def test_stemmer():
     assert porter("characterization") == "character"
 
 
+def test_stopword():
+    assert removal("jargon blargon fake words") == ['jargon', 'blargon', 'fake', 'words'], "Keep all"
+    assert removal("i me nonword myself nonword") == ['nonword', 'nonword'], "remove 3"
+
+
 if __name__ == "__main__":
     test_stemmer()
-    # print(porter("abdicate"))
+    test_stopword()
