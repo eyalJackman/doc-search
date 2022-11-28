@@ -2,6 +2,7 @@ import tokenizer
 
 porter = tokenizer.porter_stemmer
 removal = tokenizer.stopword_removal
+formatter = tokenizer.punctuation_removal
 
 
 def test_stemmer():
@@ -50,6 +51,12 @@ def test_stopword():
     assert removal("i me nonword myself nonword") == ['nonword', 'nonword'], f"remove 3: {removal('i me nonword myself nonword')}"
 
 
+def test_format():
+    assert formatter("U.S.A. U.S.A USA") == "usa usa usa", f'{formatter("U.S.A. U.S.A USA")}'
+    assert formatter('testing this to! make sure it_ works as it$ should sp)lit') == "testing this to  make sure it  works as it  should sp lit", f"{formatter('testing this to! make;;; sure it_ works as it$ should sp)lit')}"
+
+
 if __name__ == "__main__":
     test_stemmer()
     test_stopword()
+    test_format()

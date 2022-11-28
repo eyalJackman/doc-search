@@ -139,12 +139,17 @@ def stopword_removal(text: str):
 
 
 
-def punctuation_removal():
-    pass
+def punctuation_removal(text: str):
+    def replacer(inp: str) -> str:
+        return inp.replace('.', '')
+    noAbbr = re.sub(r"([a-zA-z][.]){2,}",
+                    lambda match: replacer(match.group()), text)
+    noAppo = re.sub(r"[\'\’]", '', noAbbr)
+    noPunc = re.sub(r"[^a-zA-Z0-9]", ' ', noAppo).lower()
+    return noPunc
+    # return re.sub(r"\s", r'\n', noPunc)
 
 
-# w = "de"
-# print(w[:-3])
 
 
 def tokenize(word: str) -> list[str]:
