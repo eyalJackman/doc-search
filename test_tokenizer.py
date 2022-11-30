@@ -3,13 +3,15 @@ import tokenizer
 porter = tokenizer.porter_stemmer
 removal = tokenizer.stopword_removal
 formatter = tokenizer.punctuation_removal
-
+tokenize = tokenizer.tokenize
 
 def test_stemmer():
     assert porter("lasses") == "lass", f"Step 1a: expected {porter('lasses')} to equal lass"
     assert porter("babies") == "babi", f"Step 1a: expected {porter('babies')} to equal babi"
     assert porter("russ") == "russ", f"Step 1a: expected {porter('russ')} to equal russ"
     assert porter("bras") == "bra", f"Step 1a: expected {porter('bras')} to equal bra"
+    assert porter("babys") == "babi"
+    assert porter("baby") == "babi"
 
     assert porter("feed") == "feed", f"Step 1b: expected {porter('feed')} to equal feed"
     assert porter("agreed") == "agree", f"Step 1b: expected {porter('agreed')} to equal agree"
@@ -56,7 +58,13 @@ def test_format():
     assert formatter('testing this to! make sure it_ works as it$ should sp)lit') == "testing this to  make sure it  works as it  should sp lit", f"{formatter('testing this to! make;;; sure it_ works as it$ should sp)lit')}"
 
 
+def test_tokenizer():
+    assert tokenize("test me") == ['test'], f"else {tokenize('test me')}"
+    assert tokenize("element i motivate nothingword") == ['elem', 'motiv',  'nothingword'], f'else {tokenize("element i motivate nothingword")}'
+    assert tokenize("baby babies babys then education") == ['babi', 'babi', 'babi', 'educ'], f'else {tokenize("baby babies babys then education")} '
+
 if __name__ == "__main__":
     test_stemmer()
     test_stopword()
     test_format()
+    test_tokenizer()

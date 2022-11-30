@@ -142,16 +142,19 @@ def stopword_removal(text: str):
 def punctuation_removal(text: str):
     def replacer(inp: str) -> str:
         return inp.replace('.', '')
+        
     noAbbr = re.sub(r"([a-zA-z][.]){2,}",
                     lambda match: replacer(match.group()), text)
     noAppo = re.sub(r"[\'\’]", '', noAbbr)
     noPunc = re.sub(r"[^a-zA-Z0-9]", ' ', noAppo).lower()
     return noPunc
-    # return re.sub(r"\s", r'\n', noPunc)
 
 
 
 
-def tokenize(word: str) -> list[str]:
+def tokenize(document: str) -> list[str]:
     """ Runs tokenization -- Stemming, stopword removal, punctuation removal"""
-    return porter_stemmer(stopword_removal(punctuation_removal(word)))
+    word_list = stopword_removal(punctuation_removal(document))
+    for i in range(len(word_list)):
+        word_list[i] = porter_stemmer(word_list[i])
+    return word_list
