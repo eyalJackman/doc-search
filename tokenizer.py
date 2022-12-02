@@ -1,5 +1,6 @@
 import re
 
+
 # import os
 # print(os.getcwd())
 # dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -28,7 +29,6 @@ step2_map = {"ational": "ate", "tional": "tion", "enci": "ence", "anci": "ance",
 step4_list = (
     'al', 'ance', 'ence', 'er', 'ic', 'able', 'ible', 'ant', 'ement', 'ment', 'ent', 'ion', 'ou', 'ism', 'ate', 'iti',
     'ous', 'ive', 'ize')
-
 
 with open("stopwords.txt", 'r') as rFile:
     stopwordStr = rFile.read()
@@ -138,17 +138,20 @@ def stopword_removal(text: str):
     return ret_list
 
 
-
 def punctuation_removal(text: str):
     def replacer(inp: str) -> str:
         return inp.replace('.', '')
-        
-    noAbbr = re.sub(r"([a-zA-z][.]){2,}",
-                    lambda match: replacer(match.group()), text)
-    noAppo = re.sub(r"[\'\’]", '', noAbbr)
-    noPunc = re.sub(r"[^a-zA-Z0-9]", ' ', noAppo).lower()
-    return noPunc
 
+    no_abbr = re.sub(r"([a-zA-z][.]){2,}",
+                     lambda match: replacer(match.group()), text)
+    no_appo = re.sub(r"[\'\’\"]", '', no_abbr)
+    no_punc = re.sub(r"[^a-zA-Z0-9]", ' ', no_appo).lower()
+    return no_punc
+
+
+def tokenize_word(word: str) -> "str | None":
+    updated_word = stopword_removal(punctuation_removal(word))
+    return updated_word if updated_word is not [] else None
 
 
 

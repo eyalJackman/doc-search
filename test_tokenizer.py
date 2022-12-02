@@ -5,6 +5,7 @@ removal = tokenizer.stopword_removal
 formatter = tokenizer.punctuation_removal
 tokenize = tokenizer.tokenize
 
+
 def test_stemmer():
     assert porter("lasses") == "lass", f"Step 1a: expected {porter('lasses')} to equal lass"
     assert porter("babies") == "babi", f"Step 1a: expected {porter('babies')} to equal babi"
@@ -49,19 +50,25 @@ def test_stemmer():
 
 
 def test_stopword():
-    assert removal("jargon blargon fake words") == ['jargon', 'blargon', 'fake', 'words'], f"Keep all {removal('jargon blargon fake words')}"
-    assert removal("i me nonword myself nonword") == ['nonword', 'nonword'], f"remove 3: {removal('i me nonword myself nonword')}"
+    assert removal("jargon blargon fake words") == ['jargon', 'blargon', 'fake',
+                                                    'words'], f"Keep all {removal('jargon blargon fake words')}"
+    assert removal("i me nonword myself nonword") == ['nonword',
+                                                      'nonword'], f"remove 3: {removal('i me nonword myself nonword')}"
 
 
 def test_format():
     assert formatter("U.S.A. U.S.A USA") == "usa usa usa", f'{formatter("U.S.A. U.S.A USA")}'
-    assert formatter('testing this to! make sure it_ works as it$ should sp)lit') == "testing this to  make sure it  works as it  should sp lit", f"{formatter('testing this to! make;;; sure it_ works as it$ should sp)lit')}"
+    assert formatter(
+        'testing this to! make sure it_ works as it$ should sp)lit') == "testing this to  make sure it  works as it  should sp lit", f"{formatter('testing this to! make;;; sure it_ works as it$ should sp)lit')}"
 
 
 def test_tokenizer():
     assert tokenize("test me") == ['test'], f"else {tokenize('test me')}"
-    assert tokenize("element i motivate nothingword") == ['elem', 'motiv',  'nothingword'], f'else {tokenize("element i motivate nothingword")}'
-    assert tokenize("baby babies babys then education") == ['babi', 'babi', 'babi', 'educ'], f'else {tokenize("baby babies babys then education")} '
+    assert tokenize("element i motivate nothingword") == ['elem', 'motiv',
+                                                          'nothingword'], f'else {tokenize("element i motivate nothingword")}'
+    assert tokenize("baby babies babys then education") == ['babi', 'babi', 'babi',
+                                                            'educ'], f'else {tokenize("baby babies babys then education")} '
+
 
 if __name__ == "__main__":
     test_stemmer()
