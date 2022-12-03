@@ -4,7 +4,7 @@ from tokenizer import tokenize, tokenize_word
 
 
 # type document = Dict[str, "str | int"]
-def build_index(collection: "list[dict[str]]") -> Dict[str]:
+def build_index(collection: "list[dict[str]]") -> "Dict[str]":
     inv_index = dict()
     doc_num = 0
     total_length = 0
@@ -13,6 +13,8 @@ def build_index(collection: "list[dict[str]]") -> Dict[str]:
         text = document["text"]
         split_text = re.split(r"\s+", text)
         total_length += len(text)
+        # doc_dict = index_term -> (doc_num, count, [positions])
+        
         for index, word in enumerate(split_text):
             if word in doc_dict:
                 doc_dict[word][1] += 1
