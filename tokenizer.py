@@ -1,10 +1,6 @@
 import re
 
 
-# import os
-# print(os.getcwd())
-# dir_path = os.path.dirname(os.path.realpath(__file__))
-# print(dir_path)
 # Helper functions
 
 def is_vowel(c):
@@ -83,7 +79,7 @@ def porter_stemmer(word: str):
         elif word[-1] == word[-2] and word[-1] not in ('l', 's', 'z'):
             word = word[:-1]
         elif get_measure(word) == 1 and len(word) >= 3 and (not is_vowel(word[-3]) and is_vowel(word[-2]) and not
-        is_vowel(word[-1]) and word[-1] not in ('w', 'x', 'y')):
+                                                            is_vowel(word[-1]) and word[-1] not in ('w', 'x', 'y')):
             word += "e"
 
     # Step 1c
@@ -121,7 +117,7 @@ def porter_stemmer(word: str):
     if measure > 1 and word[-1] == "e":
         word = word[:-1]
     elif measure == 1 and word[-1] == "e" and (not is_vowel(word[-3]) and is_vowel(word[-2]) and not
-    is_vowel(word[-1]) and word[-1] not in ('w', 'x', 'y')):
+                                               is_vowel(word[-1]) and word[-1] not in ('w', 'x', 'y')):
         word = word[:-1]
 
     # Step 5b
@@ -150,13 +146,13 @@ def punctuation_removal(text: str):
 
 
 def tokenize_word(word: str) -> "str | None":
+    """Tokenizes one word"""
     updated_word = stopword_removal(punctuation_removal(word))
-    return updated_word if updated_word is not [] else None
+    return None if updated_word == [] else updated_word[0]
 
 
-
-def tokenize(document: str) -> list[str]:
-    """ Runs tokenization -- Stemming, stopword removal, punctuation removal"""
+def tokenize(document: str) -> "list[str]":
+    """ Runs tokenization on a document -- Stemming, stopword removal, punctuation removal"""
     word_list = stopword_removal(punctuation_removal(document))
     for i in range(len(word_list)):
         word_list[i] = porter_stemmer(word_list[i])
