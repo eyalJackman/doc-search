@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 
 # import os
@@ -154,8 +155,7 @@ def tokenize_word(word: str) -> "str | None":
     return updated_word if updated_word is not [] else None
 
 
-
-def tokenize(document: str) -> list[str]:
+def tokenize(document: str) -> List[str]:
     """ Runs tokenization -- Stemming, stopword removal, punctuation removal"""
     word_list = stopword_removal(punctuation_removal(document))
     for i in range(len(word_list)):
