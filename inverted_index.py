@@ -1,7 +1,7 @@
+import json
 from typing import Dict
 import re
 from tokenizer import tokenize, tokenize_word
-
 
 # Inverted Index: Dict {
 #   _totaldocs: int
@@ -12,6 +12,10 @@ from tokenizer import tokenize, tokenize_word
 #                  _numdocs: int --- Total number of docs that contain (term)
 #               }
 #   }
+
+with open("./sample_docs/sample_docs.json") as read_file:
+    document_information = json.load(read_file)
+
 
 # type document = Dict[str, "str | int"]
 def build_index(collection: "List[Dict[str, str]]") -> "Dict[str, str]":
@@ -32,7 +36,6 @@ def build_index(collection: "List[Dict[str, str]]") -> "Dict[str, str]":
 
         split_text = re.split(r"\s+", text)
         inv_index["_collection_cnt"] += len(text)
-
         # Put terms/counts/positions into doc_dict, which will be transferred to inverted index
         for index, word in enumerate(split_text):
             # Skip if stopword
@@ -47,7 +50,7 @@ def build_index(collection: "List[Dict[str, str]]") -> "Dict[str, str]":
 
         # Transfer to inverted index
         for term in doc_dict:
-            document_info = doc_dict[term] # [docid, count, [positions]]
+            document_info = doc_dict[term]  # [docid, count, [positions]]
             docid, count, positions = document_info
             term_cnt = document_info[1]
             inv_index["_collection_cnt"] += term_cnt
@@ -74,15 +77,9 @@ def merge_index(index: "InvertedIndex", sub_index: "InvertedIndex"):
     pass
 
 
-
-
-dict1 = {"id": 1203421, "text": "here we go jesus we"}
-dict2 = {"id": 123125125, "text": "another document for the books we have"}
-# print(dict1['text'])
-# print(type(dict1))
-print(build_index([dict1, dict2]))
-
-
-
-
-
+if __name__ == "__main__":
+    dict1 = {"id": 1203421, "text": "here we go jesus we"}
+    dict2 = {"id": 123125125, "text": "another document for the books we have"}
+    # print(dict1['text'])
+    # print(type(dict1))
+    print(build_index([dict1, dict2]))
